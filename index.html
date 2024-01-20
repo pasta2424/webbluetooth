@@ -9,7 +9,7 @@
 
 <body>
     <!-- VER情報の挿入 -->
-    <p>バージョン: 1.0.0</p>
+    <p>バージョン: 1.0.1</p>
     
     <button id="connect-btn">接続</button>
     
@@ -29,3 +29,18 @@
 
 </body>
 </html>
+<script>
+    // DOMの内容がロードされた後にイベントリスナーを設定
+    document.addEventListener('DOMContentLoaded', function() {
+        // 'action-btn'クラスの全ボタンを取得
+        var buttons = document.querySelectorAll('.action-btn');
+        
+        // 最初のボタン（'1'）にクリックイベントリスナーを設定
+        buttons[0].addEventListener('click', function() {
+            alert('1のボタンが押されました！');
+        });
+
+        // 他のボタンについても同様の処理を行いたい場合は、
+        // ここに追加のイベントリスナーを設定します。
+    });
+</script>
