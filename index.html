@@ -44,3 +44,46 @@
         // ここに追加のイベントリスナーを設定します。
     });
 </script>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Web Bluetoothデバイス接続</title>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var connectButton = document.querySelector('.action-btn'); // 最初のボタンを選択
+
+        // 接続ボタンにイベントリスナーを追加
+        connectButton.addEventListener('click', function () {
+            if (!navigator.bluetooth) {
+                alert('Web Bluetooth APIはこのブラウザでは利用できません。');
+                return;
+            }
+
+            // BLEデバイスのリストを表示するためのポップアップを要求する
+            navigator.bluetooth.requestDevice({
+                acceptAllDevices: true, // すべてのデバイスを表示
+                optionalServices: [] // 必要なサービスを追加
+            })
+            .then(device => {
+                console.log('選択されたデバイス:', device.name);
+                // デバイスとの接続を試みるなど、更なる処理をここに追加
+            })
+            .catch(error => {
+                console.error('デバイス選択でエラーが発生しました:', error);
+            });
+        });
+    });
+</script>
+</head>
+<body>
+<div class="button-container">
+    <!-- 接続ボタン -->
+    <button class="action-btn">接続</button>
+    <!-- その他のボタン -->
+    <button class="action-btn">2</button>
+    <button class="action-btn">3</button>
+</div>
+</body>
+</html>
+
