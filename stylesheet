@@ -1,22 +1,43 @@
+/* スマホサイズの基本スタイル */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+}
+
 #connect-btn {
-    position: absolute;
+    position: fixed;
     top: 10px;
     left: 10px;
+    padding: 10px 20px;
 }
+
 .input-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    padding: 60px 20px 20px; /* ボタンの分だけ上に余白を設定 */
 }
+
 #text-input {
-    text-align: center;
+    width: calc(100% - 40px); /* パディングを考慮して幅を計算 */
+    padding: 10px;
     margin-bottom: 20px;
+    font-size: 16px; /* スマホでは大きめの文字が読みやすい */
 }
+
 .button-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-around; /* ボタン同士の間隔確保 */
+    padding: 0 20px;
 }
+
 .action-btn {
-    margin: 0 10px;
+    padding: 10px 15px;
+    font-size: 16px; /* スマホでは大きめの文字が読みやすい */
+    flex-grow: 1; /* 同じ幅になるように調整 */
+    margin: 5px;
+}
+
+@media (max-width: 480px) {
+    /* 480px以下の画面サイズの場合に適用されるスタイルを記載 */
 }
