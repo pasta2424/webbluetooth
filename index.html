@@ -1,49 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>簡単なWEBアプリ</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        #connectButton {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
-
-        #textInput {
-            margin-bottom: 20px;
-        }
-
-        #buttonContainer {
-            display: flex;
-            justify-content: center;
-        }
-
-        .actionButton {
-            margin: 0 10px;
-        }
-    </style>
+    <title>Sample Web App</title>
+    <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
-    <button id="connectButton">接続</button>
-    <div id="textInput">
-        <label for="inputText">テキスト入力:</label>
-        <input type="text" id="inputText">
+
+    <button id="connect-btn">接続</button>
+    
+    <div class="input-container">
+        <input type="text" id="text-input" placeholder="ここにテキストを入力">
     </div>
-    <div id="buttonContainer">
-        <button class="actionButton">1</button>
-        <button class="actionButton">2</button>
-        <button class="actionButton">3</button>
+    
+    <div class="button-container">
+        <button class="action-btn">1</button>
+        <button class="action-btn">2</button>
+        <button class="action-btn">3</button>
     </div>
+
+    <script>
+        // ここにJavaScriptのコードを書くことができます
+    </script>
+
 </body>
 </html>
