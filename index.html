@@ -1,89 +1,70 @@
+
 <!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sample Web App</title>
-    <link rel="stylesheet" href="stylesheet.css">
-</head>
-
-<body>
-    <!-- VER情報の挿入 -->
-    <p>バージョン: 1.0.2</p>
-    
-    <button id="connect-btn">接続</button>
-    
-    <div class="input-container">
-        <input type="text" id="text-input" placeholder="ここにテキストを入力">
-    </div>
-    
-    <div class="button-container">
-        <button class="action-btn">1</button>
-        <button class="action-btn">2</button>
-        <button class="action-btn">3</button>
-    </div>
-
-    <script>
-        // ここにJavaScriptのコードを書くことができます
-    </script>
-
-</body>
-</html>
-<script>
-    // DOMの内容がロードされた後にイベントリスナーを設定
-    document.addEventListener('DOMContentLoaded', function() {
-        // 'action-btn'クラスの全ボタンを取得
-        var buttons = document.querySelectorAll('.action-btn');
-        
-        // 最初のボタン（'1'）にクリックイベントリスナーを設定
-        buttons[0].addEventListener('click', function() {
-            alert('1のボタンが押されました！');
-        });
-
-        // 他のボタンについても同様の処理を行いたい場合は、
-        // ここに追加のイベントリスナーを設定します。
-    });
-</script>
-<!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Web Bluetoothデバイス接続</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLE Device Controller</title>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var connectButton = document.querySelector('.action-btn'); // 最初のボタンを選択
+  let chosenDevice = null;
 
-        // 接続ボタンにイベントリスナーを追加
-        connectButton.addEventListener('click', function () {
-            if (!navigator.bluetooth) {
-                alert('Web Bluetooth APIはこのブラウザでは利用できません。');
-                return;
-            }
+  async function onConnectButtonClick() {
+    try {
+      console.log('Requesting Bluetooth Device...');
+      chosenDevice = await navigator.bluetooth.requestDevice({
+        filters: [{ services: ['battery_service'] }]
+      });
 
-            // BLEデバイスのリストを表示するためのポップアップを要求する
-            navigator.bluetooth.requestDevice({
-                acceptAllDevices: true, // すべてのデバイスを表示
-                optionalServices: [] // 必要なサービスを追加
-            })
-            .then(device => {
-                console.log('選択されたデバイス:', device.name);
-                // デバイスとの接続を試みるなど、更なる処理をここに追加
-            })
-            .catch(error => {
-                console.error('デバイス選択でエラーが発生しました:', error);
-            });
-        });
-    });
+      console.log('Connecting to GATT Server...');
+      const server = await chosenDevice.gatt.connect();
+
+      console.log('Getting Service...');
+      // You'll need to change this to the specific service you're working with
+      const service = await server.getPrimaryService('battery_service');
+
+      // Add your code for getting the characteristic and setting up any event listeners you need
+      // const characteristic = await service.getCharacteristic('battery_level');
+      // characteristic.readValue().then(...);
+
+      chosenDevice.addEventListener('gattserverdisconnected', onDisconnected);
+    } catch(error) {
+      console.log('Argh! ' + error);
+    }
+  }
+
+  async function onSendCommand(command) {
+    if (!chosenDevice || !chosenDevice.gatt.connected) {
+      return console.error('Device is not connected.');
+    }
+
+    try {
+      const service = await chosenDevice.gatt.getPrimaryService('battery_service');
+      // The characteristic UUID must be replaced with the correct one for your BLE service
+      const characteristic = await service.getCharacteristic('battery_level');
+      let encoder = new TextEncoder('utf-8');
+      const data = encoder.encode(command);
+      await characteristic.writeValue(data);
+      console.log(`Sent command: ${command}`);
+    } catch (error) {
+      console.error('Send command failed: ', error);
+    }
+  }
+
+  function onDisconnected(event) {
+    const device = event.target;
+    console.log(`Device ${device.name} is disconnected.`);
+  }
 </script>
 </head>
 <body>
-<div class="button-container">
-    <!-- 接続ボタン -->
-    <button class="action-btn">接続</button>
-    <!-- その他のボタン -->
-    <button class="action-btn">2</button>
-    <button class="action-btn">3</button>
-</div>
+<button id="connect" onclick="onConnectButtonClick()">接続</button>
+<button onclick="onSendCommand('1')">シーン1</button>
+<button onclick="onSendCommand('2')">シーン2</button>
+<button onclick="onSendCommand('3')">シーン3</button>
+<div id="response">応答:</div>
+<script>
+  // Here you would handle the response from the BLE device.
+  // This will depend on how the device sends its response back.
+</script>
 </body>
 </html>
-
